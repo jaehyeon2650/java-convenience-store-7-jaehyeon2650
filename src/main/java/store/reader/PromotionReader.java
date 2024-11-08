@@ -17,7 +17,6 @@ public class PromotionReader {
         br.readLine();
         String line;
         while ((line = br.readLine()) != null) {
-            System.out.println(line);
             String[] parts = line.split(",");
             String name = parts[0];
             int buy = Integer.parseInt(parts[1]);
