@@ -26,11 +26,28 @@ public class ItemReader {
 
             Optional<Promotion> promotionOptional = promotions.stream()
                     .filter(promotion -> promotion.getName().equals(promotionsName)).findAny();
-            if (promotionOptional.isPresent()) {
-                items.add(new Item(name, price, quantity, promotionOptional.get()));
-            }
-            items.add(new Item(name, price, quantity, null));
+            items.add(new Item(name, price, quantity, promotionOptional.orElse(null)));
         }
-        return items;
+        return addRegularStock(items);
+    }
+
+    private List<Item> addRegularStock(List<Item> items) {
+        List<Item> totalItemList = new ArrayList<>();
+        for (Item item : items) {
+            totalItemList.add(item);
+            if (item.hasPromotionEvent() && !hasRegularStock(items, item.getName())) {
+                totalItemList.add(new Item(item.getName(), item.getPrice(), 0, null));
+            }
+        }
+        return totalItemList;
+    }
+
+    private boolean hasRegularStock(List<Item> items, String itemName) {
+        for (Item item : items) {
+            if (item.getName().equals(itemName) && !item.hasPromotionEvent()) {
+                return true;
+            }
+        }
+        return false;
     }
 }
