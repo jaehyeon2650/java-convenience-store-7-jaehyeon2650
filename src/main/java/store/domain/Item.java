@@ -12,4 +12,16 @@ public class Item {
         this.quantity = quantity;
         this.promotion = promotion;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean hasPromotionEvent() {
+        return promotion != null;
+    }
+
+    public int getPrice() {
+        return price;
+    }
 }
