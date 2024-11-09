@@ -13,9 +13,25 @@ public class Parser {
                 word -> {
                     word = word.substring(1, word.length() - 1);
                     String[] order = word.trim().split("-");
+                    Validator.validateSplitResultSize(order);
+                    Validator.validateNumber(order[1]);
                     orderList.add(OrderRequestDto.of(order[0], Integer.parseInt(order[1])));
                 }
         );
         return OrdersRequestDto.from(orderList);
+    }
+
+    private static class Validator {
+        public static void validateNumber(String number) {
+            if (!number.matches("\\d+")) {
+                throw new IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.");
+            }
+        }
+
+        public static void validateSplitResultSize(String[] order) {
+            if (order.length != 2) {
+                throw new IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.");
+            }
+        }
     }
 }
