@@ -13,6 +13,11 @@ public class Items {
         this.items = items;
     }
 
+    public List<Item> getItems() {
+        return Collections.unmodifiableList(items);
+    }
+
+
     public PromotionResponseDto getPromotionResult(String itemName, int purchaseCount, LocalDateTime orderDate) {
         Optional<Item> itemOptional = items.stream()
                 .filter(item -> item.getName().equals(itemName) && item.hasPromotionEvent())
