@@ -27,6 +27,11 @@ public class InputView {
         return getAnswer();
     }
 
+    public boolean chooseMemberShip() {
+        System.out.println("멤버십 할인을 받으시겠습니까? (Y/N)");
+        return getAnswer();
+    }
+
     private boolean getAnswer() {
         String answer = Console.readLine().trim();
         System.out.println();
