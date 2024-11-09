@@ -4,6 +4,8 @@ import camp.nextstep.edu.missionutils.DateTimes;
 import java.util.ArrayList;
 import java.util.List;
 import store.domain.PromotionResult;
+import store.dto.request.OrderRequestDto;
+import store.dto.request.OrdersRequestDto;
 import store.dto.request.PaymentRequestDto;
 import store.dto.response.PromotionInfoResponseDto;
 import store.dto.response.PromotionResponseDto;
@@ -63,6 +65,16 @@ public class OrderController {
             }
         }
         return PaymentRequestDto.of(name, promotion.buyCount(), promotion.getCount());
+    }
+
+    private boolean checkMemberShip() {
+        while (true) {
+            try {
+                return inputView.chooseMemberShip();
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     private boolean checkAddFreeItem(String name) {
