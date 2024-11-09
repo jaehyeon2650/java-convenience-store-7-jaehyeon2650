@@ -47,6 +47,17 @@ public class Item implements Comparable<Item> {
         return promotion.getPromotionResult(quantity, purchaseCount);
     }
 
+    public int tryPurchaseItem(int quantity) {
+        if (this.quantity < quantity) {
+            int rest = (quantity - this.quantity);
+            this.quantity = 0;
+            return rest;
+        }
+        this.quantity -= quantity;
+        return 0;
+    }
+
+
     @Override
     public int compareTo(Item other) {
         if (this.promotion == null && other.promotion != null) {
