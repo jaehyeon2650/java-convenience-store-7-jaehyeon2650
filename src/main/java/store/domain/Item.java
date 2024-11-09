@@ -32,7 +32,14 @@ public class Item implements Comparable<Item> {
         return quantity;
     }
 
-    public boolean canApplyPromotion(LocalDate date) {
+    public String getPromotionName() {
+        if (promotion == null) {
+            return null;
+        }
+        return promotion.getName();
+    }
+
+    public boolean canApplyPromotion(LocalDateTime date) {
         return promotion.canApplyPromotion(date);
     }
 
