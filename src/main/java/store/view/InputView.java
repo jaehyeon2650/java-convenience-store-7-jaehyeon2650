@@ -3,6 +3,7 @@ package store.view;
 import camp.nextstep.edu.missionutils.Console;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import store.constants.Answer;
 import store.dto.request.OrdersRequestDto;
 import store.util.Parser;
 
@@ -15,6 +16,17 @@ public class InputView {
         Validator.validateInputForm(words);
         return Parser.parseToOrders(words);
     }
+
+    public boolean chooseAddFreeItem(String name) {
+        System.out.println("현재 " + name + "은(는) 1개를 무료로 더 받을 수 있습니다. 추가하시겠습니까? (Y/N)");
+        return getAnswer();
+    }
+    private boolean getAnswer() {
+        String answer = Console.readLine().trim();
+        System.out.println();
+        return Answer.findAnswer(answer).isAnswer();
+    }
+
     private static class Validator {
         private static final Pattern ITEM_PATTERN = Pattern.compile("^\\[[^\\[]+-\\d+\\]$");
 
