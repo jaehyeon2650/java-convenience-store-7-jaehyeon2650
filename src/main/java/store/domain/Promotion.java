@@ -7,10 +7,10 @@ public class Promotion {
     private String name;
     private int buy;
     private int get;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
 
-    public Promotion(String name, int buy, int get, LocalDate startDate, LocalDate endDate) {
+    public Promotion(String name, int buy, int get, LocalDateTime startDate, LocalDateTime endDate) {
         this.name = name;
         this.buy = buy;
         this.get = get;
@@ -39,7 +39,7 @@ public class Promotion {
         return Objects.hashCode(name);
     }
 
-    public boolean canApplyPromotion(LocalDate time) {
+    public boolean canApplyPromotion(LocalDateTime time) {
         return startDate.isBefore(time) && endDate.isAfter(time);
     }
 }
