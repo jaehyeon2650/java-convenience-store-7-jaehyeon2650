@@ -1,6 +1,8 @@
 package store.domain;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import store.dto.response.PromotionResponseDto;
 
 public class Item {
     private String name;
@@ -34,4 +36,9 @@ public class Item {
     public boolean canApplyPromotion(LocalDate date) {
         return promotion.canApplyPromotion(date);
     }
+
+    public PromotionResponseDto getPromotionResult(int purchaseCount) {
+        return promotion.getPromotionResult(quantity, purchaseCount);
+    }
+
 }
