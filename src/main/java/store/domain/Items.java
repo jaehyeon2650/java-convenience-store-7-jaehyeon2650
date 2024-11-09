@@ -17,6 +17,19 @@ public class Items {
         return Collections.unmodifiableList(items);
     }
 
+    public void purchaseItem(String itemName, int quantity) {
+        int count = quantity;
+        List<Item> items = this.items.stream().filter(item -> item.getName().equals(itemName)).sorted()
+                .toList();
+        for (Item item : items) {
+            count = item.tryPurchaseItem(count);
+        }
+    }
+
+    public int getItemPrice(String itemName) {
+        Optional<Item> findItem = items.stream().filter(item -> item.getName().equals(itemName)).findAny();
+        return findItem.map(Item::getPrice).orElse(0);
+    }
 
     public PromotionResponseDto getPromotionResult(String itemName, int purchaseCount, LocalDateTime orderDate) {
         Optional<Item> itemOptional = items.stream()
