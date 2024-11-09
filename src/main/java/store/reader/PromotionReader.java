@@ -23,7 +23,7 @@ public class PromotionReader {
             int get = Integer.parseInt(parts[2]);
             LocalDate startDate = LocalDate.parse(parts[3]);
             LocalDate endDate = LocalDate.parse(parts[4]);
-            promotions.add(new Promotion(name, buy, get, startDate, endDate));
+            promotions.add(new Promotion(name, buy, get, startDate.atStartOfDay(), endDate.atStartOfDay()));
         }
 
         return promotions;
