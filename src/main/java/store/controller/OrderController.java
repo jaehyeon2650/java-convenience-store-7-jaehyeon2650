@@ -25,6 +25,20 @@ public class OrderController {
         this.orderService = orderService;
     }
 
+
+    public void run() {
+        boolean rotate = true;
+        while (rotate) {
+            outputView.printHelloMessage();
+            outputView.printItemList(orderService.getItemList());
+            List<PromotionInfoResponseDto> infoResponseDtos = makeOrderInfo();
+            List<PaymentRequestDto> paymentRequestDtos = makePaymentsRequest(infoResponseDtos);
+            boolean memberShip = checkMemberShip();
+            getReceipt(paymentRequestDtos, memberShip);
+            rotate = checkRotate();
+        }
+    }
+
     private List<PromotionInfoResponseDto> makeOrderInfo() {
         while (true) {
             try {
