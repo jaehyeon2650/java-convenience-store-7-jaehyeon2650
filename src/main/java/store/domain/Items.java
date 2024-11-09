@@ -1,12 +1,30 @@
 package store.domain;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import store.dto.response.PromotionResponseDto;
 
 public class Items {
     private final List<Item> items;
 
     public Items(List<Item> items) {
         this.items = items;
+    }
+
+    public PromotionResponseDto getPromotionResult(String itemName, int purchaseCount, LocalDateTime orderDate) {
+        Optional<Item> itemOptional = items.stream()
+                .filter(item -> item.getName().equals(itemName) && item.hasPromotionEvent())
+                .findAny();
+        if (itemOptional.isEmpty()) {
+            return PromotionResponseDto.of(PromotionResult.NONE, purchaseCount, 0, 0, 0);
+        }
+        Item findItem = itemOptional.get();
+        if (!findItem.canApplyPromotion(orderDate)) {
+            return PromotionResponseDto.of(PromotionResult.NONE, purchaseCount, 0, 0, 0);
+        }
+        return findItem.getPromotionResult(purchaseCount);
     }
 
     public void validatePurchase(String itemName, int count) {
