@@ -1,5 +1,7 @@
 package store.domain;
 
+import java.time.LocalDate;
+
 public class Item {
     private String name;
     private int price;
@@ -23,5 +25,13 @@ public class Item {
 
     public int getPrice() {
         return price;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public boolean canApplyPromotion(LocalDate date) {
+        return promotion.canApplyPromotion(date);
     }
 }
