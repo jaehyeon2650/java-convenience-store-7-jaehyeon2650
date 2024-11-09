@@ -1,12 +1,11 @@
-package store.repository;
+package store.domain;
 
 import java.util.List;
-import store.domain.Item;
 
-public class ItemRepository {
+public class Items {
     private final List<Item> items;
 
-    public ItemRepository(List<Item> items) {
+    public Items(List<Item> items) {
         this.items = items;
     }
 
