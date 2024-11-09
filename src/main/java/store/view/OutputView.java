@@ -3,6 +3,8 @@ package store.view;
 import java.util.List;
 import store.dto.response.ItemResponseDto;
 import store.dto.response.ItemsResponseDto;
+import store.dto.response.ReceiptResponseDto;
+import store.dto.response.ReceiptsResponseDto;
 
 public class OutputView {
 
@@ -20,6 +22,29 @@ public class OutputView {
             printPromotion(itemResponseDto);
         }
         System.out.println();
+    }
+
+    public void printReceipts(ReceiptsResponseDto response) {
+        System.out.println("==============W 편의점================");
+        System.out.printf("%-17s%-8s%-8s%n", "상품명", "수량", "금액");
+
+        for (ReceiptResponseDto result : response.receipt()) {
+            System.out.printf("%-17s%-8d%,-8d%n", result.name(), result.totalCount(), result.itemsPrice());
+        }
+
+        System.out.println("==============증    정===============");
+        for (ReceiptResponseDto result : response.receipt()) {
+            if (result.benefit() != 0) {
+                System.out.printf("%-17s %-8d%n", result.name(), result.getCount());
+            }
+        }
+
+        System.out.println("=====================================");
+        System.out.printf("%-17s%-8d%,-10d%n", "총구매액", response.totalCount(), response.totalPrice());
+        System.out.printf("%-17s%8s%s%,-11d%n", "행사할인", "", "-", response.promotionDiscount());
+        System.out.printf("%-17s%8s%s%,-11d%n", "멤버십할인", "", "-", response.membershipDiscount());
+        System.out.printf("%-17s%10s%,-10d%n" + System.lineSeparator(), "내실돈", "", response.payment());
+
     }
 
     private String getItemCount(ItemResponseDto itemResponseDto) {
