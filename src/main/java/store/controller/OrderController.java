@@ -9,6 +9,7 @@ import store.dto.request.OrdersRequestDto;
 import store.dto.request.PaymentRequestDto;
 import store.dto.response.PromotionInfoResponseDto;
 import store.dto.response.PromotionResponseDto;
+import store.dto.response.ReceiptsResponseDto;
 import store.service.OrderService;
 import store.view.InputView;
 import store.view.OutputView;
@@ -67,6 +68,11 @@ public class OrderController {
         return PaymentRequestDto.of(name, promotion.buyCount(), promotion.getCount());
     }
 
+    private void getReceipt(List<PaymentRequestDto> paymentRequestDtos, boolean membership) {
+        ReceiptsResponseDto receipts = orderService.payment(paymentRequestDtos, membership);
+        outputView.printReceipts(receipts);
+    }
+
     private boolean checkMemberShip() {
         while (true) {
             try {
@@ -97,4 +103,13 @@ public class OrderController {
         }
     }
 
+    private boolean checkRotate() {
+        while (true) {
+            try {
+                return inputView.chooseRotate();
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
 }
