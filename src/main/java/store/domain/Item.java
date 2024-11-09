@@ -1,10 +1,9 @@
 package store.domain;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import store.dto.response.PromotionResponseDto;
 
-public class Item {
+public class Item implements Comparable<Item> {
     private String name;
     private int price;
     private int quantity;
@@ -41,4 +40,14 @@ public class Item {
         return promotion.getPromotionResult(quantity, purchaseCount);
     }
 
+    @Override
+    public int compareTo(Item other) {
+        if (this.promotion == null && other.promotion != null) {
+            return 1;
+        }
+        if (this.promotion != null && other.promotion == null) {
+            return -1;
+        }
+        return 0;
+    }
 }
