@@ -9,8 +9,4 @@ public record PromotionInfoResponseDto(
     public PromotionResult getPromotionResult() {
         return promotionResponseDto.result();
     }
-
-    public static PromotionInfoResponseDto of(String name, PromotionResponseDto promotionResponseDto) {
-        return new PromotionInfoResponseDto(name, promotionResponseDto);
-    }
 }

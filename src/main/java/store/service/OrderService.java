@@ -30,7 +30,7 @@ public class OrderService {
     public PromotionInfoResponseDto getOrderInfo(String name, int count, LocalDateTime orderDate) {
         items.validatePurchase(name, count);
         PromotionResponseDto promotionResult = items.getPromotionResult(name, count, orderDate);
-        return PromotionInfoResponseDto.of(name, promotionResult);
+        return new PromotionInfoResponseDto(name, promotionResult);
     }
 
     public ReceiptsResponseDto payment(List<PaymentRequestDto> paymentRequestDtos, boolean memberShip) {
