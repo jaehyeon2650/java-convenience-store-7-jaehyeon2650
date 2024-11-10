@@ -70,16 +70,16 @@ public class OrderController {
         String name = promotionInfoResponseDto.name();
         if (promotionInfoResponseDto.getPromotionResult() == PromotionResult.APPLY_REGULAR_PRICE) {
             if (checkExtraPayment(name, promotion.extraBuy())) {
-                return PaymentRequestDto.of(name, promotion.buyCount() + promotion.extraBuy(), promotion.getCount());
+                return new PaymentRequestDto(name, promotion.buyCount() + promotion.extraBuy(), promotion.getCount());
             }
-            return PaymentRequestDto.of(name, promotion.buyCount(), promotion.getCount());
+            return new PaymentRequestDto(name, promotion.buyCount(), promotion.getCount());
         }
         if (promotionInfoResponseDto.getPromotionResult() == PromotionResult.REQUIRE_ADDITIONAL_ITEM) {
             if (checkAddFreeItem(name)) {
-                return PaymentRequestDto.of(name, promotion.buyCount(), promotion.getCount() + promotion.extraGet());
+                return new PaymentRequestDto(name, promotion.buyCount(), promotion.getCount() + promotion.extraGet());
             }
         }
-        return PaymentRequestDto.of(name, promotion.buyCount(), promotion.getCount());
+        return new PaymentRequestDto(name, promotion.buyCount(), promotion.getCount());
     }
 
     private void getReceipt(List<PaymentRequestDto> paymentRequestDtos, boolean membership) {
