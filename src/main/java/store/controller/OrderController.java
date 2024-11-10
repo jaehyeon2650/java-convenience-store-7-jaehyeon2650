@@ -75,7 +75,7 @@ public class OrderController {
     }
 
     private PaymentRequestDto createRequestWhenRequireAdditionalItem(String name, PromotionResponseDto promotion) {
-        if (retryAboutInvalidInput(this::checkAddFreeItem, name)) {
+        if (retryAboutInvalidInput(this::checkAddFreeItem, name, promotion.extraGet())) {
             return new PaymentRequestDto(name, promotion.buyCount(), promotion.getCount() + promotion.extraGet());
         }
         return new PaymentRequestDto(name, promotion.buyCount(), promotion.getCount());
@@ -97,8 +97,8 @@ public class OrderController {
         return inputView.chooseMemberShip();
     }
 
-    private boolean checkAddFreeItem(String name) {
-        return inputView.chooseAddFreeItem(name);
+    private boolean checkAddFreeItem(String name, int count) {
+        return inputView.chooseAddFreeItem(name, count);
     }
 
     private boolean checkExtraPayment(String name, int count) {

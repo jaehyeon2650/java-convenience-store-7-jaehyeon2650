@@ -17,8 +17,8 @@ public class InputView {
         return Parser.parseToOrders(words);
     }
 
-    public boolean chooseAddFreeItem(String name) {
-        System.out.println("현재 " + name + "은(는) 1개를 무료로 더 받을 수 있습니다. 추가하시겠습니까? (Y/N)");
+    public boolean chooseAddFreeItem(String name, int count) {
+        System.out.println("현재 " + name + "은(는) " + count + "개를 무료로 더 받을 수 있습니다. 추가하시겠습니까? (Y/N)");
         return getAnswer();
     }
 
