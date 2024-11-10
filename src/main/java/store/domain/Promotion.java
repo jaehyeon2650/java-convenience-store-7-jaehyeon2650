@@ -44,11 +44,14 @@ public class Promotion {
         return Objects.hashCode(name);
     }
 
-    public boolean canApplyPromotion(LocalDateTime time) {
+    private boolean canApplyPromotion(LocalDateTime time) {
         return startDate.isBefore(time) && endDate.isAfter(time);
     }
 
-    public PromotionResponseDto getPromotionResult(int stockQuantity, int purchase) {
+    public PromotionResponseDto getPromotionResult(int stockQuantity, int purchase, LocalDateTime orderDate) {
+        if (!canApplyPromotion(orderDate)) {
+            return createFailResponse(purchase);
+        }
         if (stockQuantity > purchase && purchase % (buy + get) == buy) {
             return createAdditionalPurchaseRequirementResponse(purchase);
         }
@@ -56,6 +59,10 @@ public class Promotion {
             return createRegularPriceRequirementResponse(stockQuantity, purchase);
         }
         return createSuccessResponse(purchase);
+    }
+
+    private PromotionResponseDto createFailResponse(int purchase) {
+        return PromotionResponseDto.of(PromotionResult.NONE, purchase, 0, 0, 0);
     }
 
     private PromotionResponseDto createSuccessResponse(int purchase) {

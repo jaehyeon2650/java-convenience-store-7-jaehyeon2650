@@ -39,10 +39,7 @@ public class Items {
             return PromotionResponseDto.of(PromotionResult.NONE, purchaseCount, 0, 0, 0);
         }
         Item findItem = itemOptional.get();
-        if (!findItem.canApplyPromotion(orderDate)) {
-            return PromotionResponseDto.of(PromotionResult.NONE, purchaseCount, 0, 0, 0);
-        }
-        return findItem.getPromotionResult(purchaseCount);
+        return findItem.getPromotionResult(purchaseCount, orderDate);
     }
 
     public void validatePurchase(String itemName, int count) {

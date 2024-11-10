@@ -16,12 +16,12 @@ public class Item implements Comparable<Item> {
         this.promotion = promotion;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public boolean hasPromotionEvent() {
         return promotion != null;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public int getPrice() {
@@ -36,15 +36,11 @@ public class Item implements Comparable<Item> {
         if (promotion == null) {
             return null;
         }
-        return promotion.getName();
+        return promotion.getPromotionName();
     }
 
-    public boolean canApplyPromotion(LocalDateTime date) {
-        return promotion.canApplyPromotion(date);
-    }
-
-    public PromotionResponseDto getPromotionResult(int purchaseCount) {
-        return promotion.getPromotionResult(quantity, purchaseCount);
+    public PromotionResponseDto getPromotionResult(int purchaseCount, LocalDateTime orderDate) {
+        return promotion.getPromotionResult(quantity, purchaseCount, orderDate);
     }
 
     public int tryPurchaseItem(int quantity) {
