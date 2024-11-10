@@ -1,6 +1,8 @@
 package store.constants;
 
 import java.util.Arrays;
+import store.exception.ErrorMessage;
+import store.exception.StoreException;
 
 public enum Answer {
     YES("Y", true), NO("N", false);
@@ -15,7 +17,7 @@ public enum Answer {
     public static Answer findAnswer(String input) {
         return Arrays.stream(Answer.values()).filter(answer -> answer.input.equals(input))
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 잘못된 입력입니다. 다시 입력해 주세요."));
+                .orElseThrow(() -> StoreException.from(ErrorMessage.INVALID_INPUT));
     }
 
     public boolean isAnswer() {
