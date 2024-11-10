@@ -15,7 +15,7 @@ public class Parser {
                     String[] order = word.trim().split("-");
                     Validator.validateSplitResultSize(order);
                     Validator.validateNumber(order[1]);
-                    orderList.add(OrderRequestDto.of(order[0], Integer.parseInt(order[1])));
+                    orderList.add(new OrderRequestDto(order[0], Integer.parseInt(order[1])));
                 }
         );
         return OrdersRequestDto.from(orderList);
