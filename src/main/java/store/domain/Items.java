@@ -36,7 +36,7 @@ public class Items {
                 .filter(item -> item.getName().equals(itemName) && item.hasPromotionEvent())
                 .findAny();
         if (itemOptional.isEmpty()) {
-            return PromotionResponseDto.of(PromotionResult.NONE, purchaseCount, 0, 0, 0);
+            return new PromotionResponseDto(PromotionResult.NONE, purchaseCount, 0, 0, 0);
         }
         Item findItem = itemOptional.get();
         return findItem.getPromotionResult(purchaseCount, orderDate);

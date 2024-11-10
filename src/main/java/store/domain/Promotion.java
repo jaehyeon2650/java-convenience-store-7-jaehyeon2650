@@ -62,7 +62,7 @@ public class Promotion {
     }
 
     private PromotionResponseDto createFailResponse(int purchase) {
-        return PromotionResponseDto.of(PromotionResult.NONE, purchase, 0, 0, 0);
+        return new PromotionResponseDto(PromotionResult.NONE, purchase, 0, 0, 0);
     }
 
     private PromotionResponseDto createSuccessResponse(int purchase) {
@@ -71,7 +71,7 @@ public class Promotion {
         int getCount = set * get;
         int extraBuy = 0;
         int extraGet = 0;
-        return PromotionResponseDto.of(SUCCESS, buyCount, getCount, extraBuy, extraGet);
+        return new PromotionResponseDto(SUCCESS, buyCount, getCount, extraBuy, extraGet);
     }
 
     private PromotionResponseDto createRegularPriceRequirementResponse(int stockQuantity, int purchase) {
@@ -80,7 +80,7 @@ public class Promotion {
         int getCount = set * get;
         int extraGet = 0;
         int extraBuy = (purchase - stockQuantity) + stockQuantity % (buy + get);
-        return PromotionResponseDto.of(APPLY_REGULAR_PRICE, buyCount, getCount, extraBuy, extraGet);
+        return new PromotionResponseDto(APPLY_REGULAR_PRICE, buyCount, getCount, extraBuy, extraGet);
     }
 
     private PromotionResponseDto createAdditionalPurchaseRequirementResponse(int purchase) {
@@ -89,7 +89,7 @@ public class Promotion {
         int getCount = set * get;
         int extraBuy = 0;
         int extraGet = 1;
-        return PromotionResponseDto.of(REQUIRE_ADDITIONAL_ITEM, buyCount, getCount, extraBuy, extraGet);
+        return new PromotionResponseDto(REQUIRE_ADDITIONAL_ITEM, buyCount, getCount, extraBuy, extraGet);
     }
 
 }
