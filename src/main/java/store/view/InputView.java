@@ -44,7 +44,7 @@ public class InputView {
     }
 
     private static class Validator {
-        private static final Pattern ITEM_PATTERN = Pattern.compile("^\\[[^\\[]+-\\d+\\]$");
+        private static final Pattern ITEM_PATTERN = Pattern.compile("^\\[\\s*[^\\[]+\\s*-\\s*\\d+\\s*\\]$");
 
         public static void validateInputForm(String[] words) {
             for (String word : words) {
