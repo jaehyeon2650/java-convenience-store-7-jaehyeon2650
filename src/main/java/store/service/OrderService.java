@@ -38,6 +38,7 @@ public class OrderService {
         for (PaymentRequestDto paymentRequestDto : paymentRequestDtos) {
             String itemName = paymentRequestDto.name();
             int count = paymentRequestDto.buy() + paymentRequestDto.get();
+            items.purchaseItem(itemName, count);
             int itemsPrice = items.calculateItemsPrice(itemName, count);
             int benefit = items.calculateItemsPrice(itemName, paymentRequestDto.get());
             receipts.add(new ReceiptResponseDto(itemName, count, itemsPrice, paymentRequestDto.get(), benefit));
@@ -46,27 +47,44 @@ public class OrderService {
     }
 
     private ReceiptsResponseDto makeReceiptsResponseDto(List<ReceiptResponseDto> receipts, boolean memberShip) {
-        int totalPrice = 0;
-        int totalCount = 0;
-        int promotionDiscount = 0;
-        int notBenefitPrice = 0;
-        for (ReceiptResponseDto receipt : receipts) {
-            totalPrice += receipt.itemsPrice();
-            totalCount += receipt.totalCount();
-            promotionDiscount += receipt.benefit();
-            if (receipt.benefit() == 0) {
-                notBenefitPrice += receipt.itemsPrice();
-            }
-        }
-        int membershipBenefit = (int) (notBenefitPrice * 0.3);
-        if (membershipBenefit > 8000) {
-            membershipBenefit = 8000;
-        }
+        int totalPrice = calculateTotalPrice(receipts);
+        int totalCount = calculateTotalCount(receipts);
+        int promotionDiscount = calculatePromotionDiscount(receipts);
+        int notBenefitPrice = calculateNotBenefitPrice(receipts);
+        int membershipBenefit = calculateMembershipBenefit(notBenefitPrice);
         if (memberShip) {
-            return new ReceiptsResponseDto(totalPrice, totalCount, promotionDiscount, membershipBenefit,
-                    totalPrice - promotionDiscount - membershipBenefit, receipts);
+            return createResponseDto(totalPrice, totalCount, promotionDiscount, membershipBenefit, receipts);
         }
-        return new ReceiptsResponseDto(totalPrice, totalCount, promotionDiscount, 0, totalPrice - promotionDiscount,
-                receipts);
+        return createResponseDto(totalPrice, totalCount, promotionDiscount, 0, receipts);
+    }
+
+    private int calculateTotalPrice(List<ReceiptResponseDto> receipts) {
+        return receipts.stream().mapToInt(ReceiptResponseDto::itemsPrice).sum();
+    }
+
+    private int calculateTotalCount(List<ReceiptResponseDto> receipts) {
+        return receipts.stream().mapToInt(ReceiptResponseDto::totalCount).sum();
+    }
+
+    private int calculatePromotionDiscount(List<ReceiptResponseDto> receipts) {
+        return receipts.stream().mapToInt(ReceiptResponseDto::benefit).sum();
+    }
+
+    private int calculateNotBenefitPrice(List<ReceiptResponseDto> receipts) {
+        return receipts.stream()
+                .filter(receipt -> receipt.benefit() == 0)
+                .mapToInt(ReceiptResponseDto::itemsPrice)
+                .sum();
+    }
+
+    private int calculateMembershipBenefit(int notBenefitPrice) {
+        int membershipBenefit = (int) (notBenefitPrice * 0.3);
+        return Math.min(membershipBenefit, 8000);
+    }
+
+    private ReceiptsResponseDto createResponseDto(int totalPrice, int totalCount, int promotionDiscount,
+                                                  int membershipBenefit, List<ReceiptResponseDto> receipts) {
+        return new ReceiptsResponseDto(totalPrice, totalCount, promotionDiscount, membershipBenefit,
+                totalPrice - promotionDiscount - membershipBenefit, receipts);
     }
 }
