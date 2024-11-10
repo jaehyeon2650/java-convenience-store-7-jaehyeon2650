@@ -1,6 +1,7 @@
 package store.domain;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import store.dto.response.PromotionResponseDto;
 
 public class Item implements Comparable<Item> {
@@ -28,15 +29,11 @@ public class Item implements Comparable<Item> {
         return price;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public String getPromotionName() {
+    public Optional<String> getPromotionName() {
         if (promotion == null) {
-            return null;
+            return Optional.empty();
         }
-        return promotion.getPromotionName();
+        return Optional.of(promotion.getPromotionName());
     }
 
     public PromotionResponseDto getPromotionResult(int purchaseCount, LocalDateTime orderDate) {

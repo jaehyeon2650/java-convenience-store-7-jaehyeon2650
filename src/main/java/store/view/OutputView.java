@@ -43,7 +43,7 @@ public class OutputView {
     }
 
     private void printPromotion(ItemResponseDto itemResponseDto) {
-        if (itemResponseDto.promotion() != null) {
+        if (itemResponseDto.promotion().isPresent()) {
             System.out.print(" " + itemResponseDto.promotion());
         }
         System.out.println();
