@@ -8,7 +8,7 @@ public record ItemResponseDto(
         int quantity,
         String promotion
 ) {
-    public static ItemResponseDto of(Item item) {
-        return new ItemResponseDto(item.getName(), item.getPrice(), item.getQuantity(), item.getPromotionName());
+    public ItemResponseDto(Item item) {
+        this(item.getName(), item.getPrice(), item.getQuantity(), item.getPromotionName());
     }
 }

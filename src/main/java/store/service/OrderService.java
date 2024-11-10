@@ -25,6 +25,7 @@ public class OrderService {
         List<Item> itemList = items.getItems();
         List<ItemResponseDto> list = itemList.stream().map(ItemResponseDto::of).toList();
         return ItemsResponseDto.from(list);
+        List<ItemResponseDto> list = itemList.stream().map(ItemResponseDto::new).toList();
     }
 
     public PromotionInfoResponseDto getOrderInfo(String name, int count, LocalDateTime orderDate) {
