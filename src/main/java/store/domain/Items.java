@@ -22,11 +22,13 @@ public class Items {
     }
 
     public void purchaseItem(String itemName, int quantity) {
-        int count = quantity;
+        int totalCount = quantity;
         List<Item> items = this.items.stream().filter(item -> item.getName().equals(itemName)).sorted()
                 .toList();
         for (Item item : items) {
-            count = item.tryPurchaseItem(count);
+            int purchaseCount = Math.min(totalCount, item.getQuantity());
+            item.purchaseItem(purchaseCount);
+            totalCount -= purchaseCount;
         }
     }
 
