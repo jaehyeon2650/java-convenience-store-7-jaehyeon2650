@@ -15,8 +15,7 @@ public class Parser {
         List<OrderRequestDto> orderList = new ArrayList<>();
         Arrays.stream(words).forEach(
                 word -> {
-                    word = word.substring(1, word.length() - 1);
-                    String[] order = word.trim().split("-");
+                    String[] order = word.substring(1, word.length() - 1).trim().split("-");
                     Validator.validateSplitResultSize(order);
                     orderList.add(new OrderRequestDto(order[0].trim(), Validator.validateNumber(order[1].trim())));
                 }
