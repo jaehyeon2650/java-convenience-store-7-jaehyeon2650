@@ -12,6 +12,7 @@ import store.dto.request.PaymentRequestDto;
 import store.dto.response.PromotionInfoResponseDto;
 import store.dto.response.PromotionResponseDto;
 import store.dto.response.ReceiptsResponseDto;
+import store.exception.StoreException;
 import store.service.OrderService;
 import store.view.InputView;
 import store.view.OutputView;
@@ -112,7 +113,7 @@ public class OrderController {
         while (true) {
             try {
                 return supplier.get();
-            } catch (IllegalArgumentException e) {
+            } catch (StoreException e) {
                 outputView.printErrorMessage(e.getMessage());
             }
         }
@@ -122,7 +123,7 @@ public class OrderController {
         while (true) {
             try {
                 return function.apply(arg1, arg2);
-            } catch (IllegalArgumentException e) {
+            } catch (StoreException e) {
                 outputView.printErrorMessage(e.getMessage());
             }
         }
