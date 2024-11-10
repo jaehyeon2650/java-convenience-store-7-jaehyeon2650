@@ -4,7 +4,6 @@ import camp.nextstep.edu.missionutils.DateTimes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import store.domain.PromotionResult;
 import store.dto.request.OrderRequestDto;
@@ -113,16 +112,6 @@ public class OrderController {
         while (true) {
             try {
                 return supplier.get();
-            } catch (IllegalArgumentException e) {
-                outputView.printErrorMessage(e.getMessage());
-            }
-        }
-    }
-
-    private <T, R> R retryAboutInvalidInput(Function<T, R> function, T argument) {
-        while (true) {
-            try {
-                return function.apply(argument);
             } catch (IllegalArgumentException e) {
                 outputView.printErrorMessage(e.getMessage());
             }
