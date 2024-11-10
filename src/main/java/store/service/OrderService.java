@@ -38,10 +38,9 @@ public class OrderService {
         for (PaymentRequestDto paymentRequestDto : paymentRequestDtos) {
             String itemName = paymentRequestDto.name();
             int count = paymentRequestDto.buy() + paymentRequestDto.get();
-            int price = items.getItemPrice(itemName);
-            items.purchaseItem(itemName, count);
-            int benefit = price * paymentRequestDto.get();
-            receipts.add(new ReceiptResponseDto(itemName, count, count * price, paymentRequestDto.get(), benefit));
+            int itemsPrice = items.calculateItemsPrice(itemName, count);
+            int benefit = items.calculateItemsPrice(itemName, paymentRequestDto.get());
+            receipts.add(new ReceiptResponseDto(itemName, count, itemsPrice, paymentRequestDto.get(), benefit));
         }
         return makeReceiptsResponseDto(receipts, memberShip);
     }

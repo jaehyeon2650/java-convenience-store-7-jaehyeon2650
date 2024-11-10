@@ -29,6 +29,14 @@ public class Item implements Comparable<Item> {
         return price;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public int calculatePrice(int quantity) {
+        return price * quantity;
+    }
+
     public Optional<String> getPromotionName() {
         if (promotion == null) {
             return Optional.empty();

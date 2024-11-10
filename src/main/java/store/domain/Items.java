@@ -30,9 +30,9 @@ public class Items {
         }
     }
 
-    public int getItemPrice(String itemName) {
+    public int calculateItemsPrice(String itemName, int quantity) {
         Optional<Item> findItem = items.stream().filter(item -> item.getName().equals(itemName)).findAny();
-        return findItem.map(Item::getPrice).orElse(0);
+        return findItem.map(item -> item.calculatePrice(quantity)).orElse(0);
     }
 
     public PromotionResponseDto getPromotionResult(String itemName, int purchaseCount, LocalDateTime orderDate) {
