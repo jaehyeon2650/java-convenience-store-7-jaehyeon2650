@@ -3,6 +3,8 @@ package store.domain;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import store.dto.response.PromotionResponseDto;
+import store.exception.ErrorMessage;
+import store.exception.StoreException;
 
 public class Item implements Comparable<Item> {
     private String name;
@@ -48,14 +50,11 @@ public class Item implements Comparable<Item> {
         return promotion.getPromotionResult(quantity, purchaseCount, orderDate);
     }
 
-    public int tryPurchaseItem(int quantity) {
-        if (this.quantity < quantity) {
-            int rest = (quantity - this.quantity);
-            this.quantity = 0;
-            return rest;
-        }
+    public void purchaseItem(int quantity) {
         this.quantity -= quantity;
-        return 0;
+        if (this.quantity < 0) {
+            throw StoreException.from(ErrorMessage.INVALID_QUANTITY);
+        }
     }
 
 
