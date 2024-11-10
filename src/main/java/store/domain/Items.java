@@ -1,10 +1,14 @@
 package store.domain;
 
+import static store.exception.ErrorMessage.INVALID_ITEM;
+import static store.exception.ErrorMessage.INVALID_QUANTITY;
+
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import store.dto.response.PromotionResponseDto;
+import store.exception.StoreException;
 
 public class Items {
     private final List<Item> items;
@@ -51,7 +55,7 @@ public class Items {
         public static void validateItemName(List<Item> items, String itemName) {
             boolean hasItemName = items.stream().anyMatch(item -> item.getName().equals(itemName));
             if (!hasItemName) {
-                throw new IllegalArgumentException("[ERROR] 존재하지 않는 상품입니다. 다시 입력해 주세요.");
+                throw StoreException.from(INVALID_ITEM);
             }
         }
 
@@ -59,7 +63,7 @@ public class Items {
             int sum = items.stream().filter(item -> item.getName().equals(itemName))
                     .mapToInt(Item::getQuantity).sum();
             if (sum < count) {
-                throw new IllegalArgumentException("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요.");
+                throw StoreException.from(INVALID_QUANTITY);
             }
         }
     }
