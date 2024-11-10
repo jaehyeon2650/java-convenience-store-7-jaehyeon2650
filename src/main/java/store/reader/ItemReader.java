@@ -25,7 +25,7 @@ public class ItemReader {
             String promotionsName = parts[3];
 
             Optional<Promotion> promotionOptional = promotions.stream()
-                    .filter(promotion -> promotion.getName().equals(promotionsName)).findAny();
+                    .filter(promotion -> promotion.getPromotionName().equals(promotionsName)).findAny();
             items.add(new Item(name, price, quantity, promotionOptional.orElse(null)));
         }
         return addRegularStock(items);

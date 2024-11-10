@@ -23,7 +23,7 @@ public class Promotion {
         this.endDate = endDate;
     }
 
-    public String getName() {
+    public String getPromotionName() {
         return name;
     }
 
