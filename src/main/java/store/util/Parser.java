@@ -18,7 +18,7 @@ public class Parser {
                     orderList.add(new OrderRequestDto(order[0], Integer.parseInt(order[1])));
                 }
         );
-        return OrdersRequestDto.from(orderList);
+        return new OrdersRequestDto(orderList);
     }
 
     private static class Validator {
