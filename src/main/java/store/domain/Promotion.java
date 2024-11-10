@@ -5,7 +5,6 @@ import static store.domain.PromotionResult.REQUIRE_ADDITIONAL_ITEM;
 import static store.domain.PromotionResult.SUCCESS;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 import store.dto.response.PromotionResponseDto;
 
 public class Promotion {
@@ -27,27 +26,6 @@ public class Promotion {
         return name;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Promotion promotion = (Promotion) o;
-        return Objects.equals(name, promotion.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(name);
-    }
-
-    private boolean canApplyPromotion(LocalDateTime time) {
-        return startDate.isBefore(time) && endDate.isAfter(time);
-    }
-
     public PromotionResponseDto getPromotionResult(int stockQuantity, int purchase, LocalDateTime orderDate) {
         if (!canApplyPromotion(orderDate)) {
             return createFailResponse(purchase);
@@ -59,6 +37,10 @@ public class Promotion {
             return createRegularPriceRequirementResponse(stockQuantity, purchase);
         }
         return createSuccessResponse(purchase);
+    }
+
+    private boolean canApplyPromotion(LocalDateTime time) {
+        return startDate.isBefore(time) && endDate.isAfter(time);
     }
 
     private PromotionResponseDto createFailResponse(int purchase) {
