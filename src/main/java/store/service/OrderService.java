@@ -1,7 +1,6 @@
 package store.service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import store.domain.Item;
 import store.domain.Items;
@@ -34,16 +33,18 @@ public class OrderService {
     }
 
     public ReceiptsResponseDto payment(List<PaymentRequestDto> paymentRequestDtos, boolean memberShip) {
-        List<ReceiptResponseDto> receipts = new ArrayList<>();
-        for (PaymentRequestDto paymentRequestDto : paymentRequestDtos) {
-            int count = paymentRequestDto.buy() + paymentRequestDto.get();
-            items.purchaseItem(paymentRequestDto.name(), count);
-            int itemsPrice = items.calculateItemsPrice(paymentRequestDto.name(), count);
-            int benefit = items.calculateItemsPrice(paymentRequestDto.name(), paymentRequestDto.get());
-            receipts.add(new ReceiptResponseDto(paymentRequestDto.name(), count, itemsPrice, paymentRequestDto.get(),
-                    benefit));
-        }
+        List<ReceiptResponseDto> receipts = paymentRequestDtos.stream()
+                .map(this::createReceiptResponse)
+                .toList();
         return makeReceiptsResponseDto(receipts, memberShip);
+    }
+
+    private ReceiptResponseDto createReceiptResponse(PaymentRequestDto paymentRequestDto) {
+        int count = paymentRequestDto.buy() + paymentRequestDto.get();
+        items.purchaseItem(paymentRequestDto.name(), count);
+        int itemsPrice = items.calculateItemsPrice(paymentRequestDto.name(), count);
+        int benefit = items.calculateItemsPrice(paymentRequestDto.name(), paymentRequestDto.get());
+        return new ReceiptResponseDto(paymentRequestDto.name(), count, itemsPrice, paymentRequestDto.get(), benefit);
     }
 
     private ReceiptsResponseDto makeReceiptsResponseDto(List<ReceiptResponseDto> receipts, boolean memberShip) {
@@ -52,6 +53,13 @@ public class OrderService {
         int promotionDiscount = calculatePromotionDiscount(receipts);
         int notBenefitPrice = calculateNotBenefitPrice(receipts);
         int membershipBenefit = calculateMembershipBenefit(notBenefitPrice);
+        return checkMemberShipAndCreateReceipt(receipts, memberShip, totalPrice, totalCount, promotionDiscount,
+                membershipBenefit);
+    }
+
+    private ReceiptsResponseDto checkMemberShipAndCreateReceipt(List<ReceiptResponseDto> receipts, boolean memberShip,
+                                                                int totalPrice, int totalCount, int promotionDiscount,
+                                                                int membershipBenefit) {
         if (memberShip) {
             return createResponseDto(totalPrice, totalCount, promotionDiscount, membershipBenefit, receipts);
         }
