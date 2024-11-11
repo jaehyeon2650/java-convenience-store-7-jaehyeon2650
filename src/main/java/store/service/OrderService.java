@@ -36,12 +36,12 @@ public class OrderService {
     public ReceiptsResponseDto payment(List<PaymentRequestDto> paymentRequestDtos, boolean memberShip) {
         List<ReceiptResponseDto> receipts = new ArrayList<>();
         for (PaymentRequestDto paymentRequestDto : paymentRequestDtos) {
-            String itemName = paymentRequestDto.name();
             int count = paymentRequestDto.buy() + paymentRequestDto.get();
-            items.purchaseItem(itemName, count);
-            int itemsPrice = items.calculateItemsPrice(itemName, count);
-            int benefit = items.calculateItemsPrice(itemName, paymentRequestDto.get());
-            receipts.add(new ReceiptResponseDto(itemName, count, itemsPrice, paymentRequestDto.get(), benefit));
+            items.purchaseItem(paymentRequestDto.name(), count);
+            int itemsPrice = items.calculateItemsPrice(paymentRequestDto.name(), count);
+            int benefit = items.calculateItemsPrice(paymentRequestDto.name(), paymentRequestDto.get());
+            receipts.add(new ReceiptResponseDto(paymentRequestDto.name(), count, itemsPrice, paymentRequestDto.get(),
+                    benefit));
         }
         return makeReceiptsResponseDto(receipts, memberShip);
     }
