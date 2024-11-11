@@ -8,11 +8,11 @@ import java.time.LocalDateTime;
 import store.dto.response.PromotionResponseDto;
 
 public class Promotion {
-    private String name;
-    private int buy;
-    private int get;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private final String name;
+    private final int buy;
+    private final int get;
+    private final LocalDateTime startDate;
+    private final LocalDateTime endDate;
 
     public Promotion(String name, int buy, int get, LocalDateTime startDate, LocalDateTime endDate) {
         this.name = name;
