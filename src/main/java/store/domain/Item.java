@@ -47,10 +47,10 @@ public class Item implements Comparable<Item> {
     }
 
     public PromotionResponseDto getPromotionResult(int purchaseCount, LocalDateTime orderDate) {
-        if (promotion == null) {
+        if (promotion == null || !promotion.canApplyPromotion(orderDate)) {
             return new PromotionResponseDto(PromotionResult.NONE, purchaseCount, 0, 0, 0);
         }
-        return promotion.getPromotionResult(quantity, purchaseCount, orderDate);
+        return promotion.getPromotionResult(quantity, purchaseCount);
     }
 
     public void purchaseItem(int quantity) {
