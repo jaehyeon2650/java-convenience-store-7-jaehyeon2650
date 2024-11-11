@@ -11,6 +11,30 @@ import store.dto.response.PromotionResponseDto;
 
 class PromotionTest {
     @Test
+    @DisplayName("canApplyPromotion - 프로모션 적용이 가능한 기간이면 true를 반환한다.")
+    void canGetPromotion() {
+        // given
+        Promotion promotion = make2Plus1Promotion();
+        LocalDateTime time = LocalDateTime.of(2024, 10, 10, 0, 0, 0);
+        // when
+        boolean canApplyPromotion = promotion.canApplyPromotion(time);
+        // then
+        assertThat(canApplyPromotion).isTrue();
+    }
+
+    @Test
+    @DisplayName("canApplyPromotion - 프로모션 적용이 가능한 기간이면 true를 반환한다.")
+    void cantGetPromotion() {
+        // given
+        Promotion promotion = make2Plus1Promotion();
+        LocalDateTime time = LocalDateTime.of(2024, 1, 10, 0, 0, 0);
+        // when
+        boolean canApplyPromotion = promotion.canApplyPromotion(time);
+        // then
+        assertThat(canApplyPromotion).isFalse();
+    }
+
+    @Test
     @DisplayName("getPromotionResult(2+1) - 프로모션 아이템 재고보다 많이 구매하려는 경우 일반 결제할 상품이 생긴다.")
     void moreThanStockQuantityWhen2plus1() {
         // given
