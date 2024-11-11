@@ -3,7 +3,6 @@ package store.config;
 import java.io.IOException;
 import java.util.List;
 import store.controller.OrderController;
-import store.domain.Item;
 import store.domain.Items;
 import store.domain.Promotion;
 import store.exception.ErrorMessage;
@@ -41,8 +40,7 @@ public class StoreConfig {
                 PromotionReader promotionReader = new PromotionReader();
                 ItemReader itemReader = new ItemReader();
                 List<Promotion> promotions = promotionReader.readPromotions(PROMOTION_FILE);
-                List<Item> itemList = itemReader.readItems(ITEMS_FILE, promotions);
-                return new Items(itemList);
+                return new Items(itemReader.readItems(ITEMS_FILE, promotions));
             } catch (IOException e) {
                 throw StoreException.from(ErrorMessage.FILE_PROBLEM);
             }
