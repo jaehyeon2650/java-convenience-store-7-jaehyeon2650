@@ -13,6 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import store.dto.response.PromotionResponseDto;
 import store.exception.StoreException;
 
 class ItemTest {
@@ -72,6 +73,38 @@ class ItemTest {
         assertThatThrownBy(() -> item.purchaseItem(11))
                 .isInstanceOf(StoreException.class)
                 .hasMessageContaining(INVALID_QUANTITY.getMessage());
+    }
+
+    @Test
+    @DisplayName("getPromotionResult - 프로모션이 있지만 기간이 지났을 경우 결과는 NONE이다.")
+    void notPromotionDate() {
+        // given
+        Item item = createHasPromotionItem();
+        // when
+        PromotionResponseDto promotionResult = item.getPromotionResult(7,
+                LocalDateTime.of(2024, 12, 10, 0, 0, 0));
+        // then
+        assertThat(promotionResult.result()).isEqualTo(PromotionResult.NONE);
+        assertThat(promotionResult.buyCount()).isEqualTo(7);
+        assertThat(promotionResult.getCount()).isEqualTo(0);
+        assertThat(promotionResult.extraGet()).isEqualTo(0);
+        assertThat(promotionResult.extraBuy()).isEqualTo(0);
+    }
+
+    @Test
+    @DisplayName("getPromotionResult - 프로모션이 없는 경우 결과는 NONE이다.")
+    void noPromotion() {
+        // given
+        Item item = createHasntPromotionItem();
+        // when
+        PromotionResponseDto promotionResult = item.getPromotionResult(7,
+                LocalDateTime.of(2024, 12, 10, 0, 0, 0));
+        // then
+        assertThat(promotionResult.result()).isEqualTo(PromotionResult.NONE);
+        assertThat(promotionResult.buyCount()).isEqualTo(7);
+        assertThat(promotionResult.getCount()).isEqualTo(0);
+        assertThat(promotionResult.extraGet()).isEqualTo(0);
+        assertThat(promotionResult.extraBuy()).isEqualTo(0);
     }
 
     @Test
