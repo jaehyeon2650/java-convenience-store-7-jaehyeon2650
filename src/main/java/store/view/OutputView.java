@@ -7,18 +7,13 @@ import store.dto.response.ReceiptResponseDto;
 import store.dto.response.ReceiptsResponseDto;
 
 public class OutputView {
-
-    public void printHelloMessage() {
-        System.out.println("안녕하세요. W편의점입니다.");
-    }
-
     public void printErrorMessage(String errorMessage) {
         System.out.println(errorMessage);
     }
 
     public void printItemList(ItemsResponseDto itemList) {
-        System.out.println("현재 보유하고 있는 상품입니다.");
-        System.out.println();
+        System.out.println("안녕하세요. W편의점입니다.");
+        System.out.println("현재 보유하고 있는 상품입니다.\n");
         List<ItemResponseDto> itemResponseDtos = itemList.itemResponses();
         for (ItemResponseDto itemResponseDto : itemResponseDtos) {
             System.out.printf("- " + itemResponseDto.name() + " %,d원 ", itemResponseDto.price());
