@@ -5,6 +5,7 @@ import static store.exception.ErrorMessage.INVALID_QUANTITY;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import store.dto.response.PromotionResponseDto;
@@ -39,10 +40,11 @@ public class Items {
 
     public PromotionResponseDto getPromotionResult(String itemName, int purchaseCount, LocalDateTime orderDate) {
         Optional<Item> itemOptional = items.stream()
-                .filter(item -> item.getName().equals(itemName) && item.hasPromotionEvent())
-                .findAny();
+                .filter(item -> item.getName().equals(itemName))
+                .sorted(Comparator.comparing(Item::hasPromotionEvent).reversed())
+                .findFirst();
         if (itemOptional.isEmpty()) {
-            return new PromotionResponseDto(PromotionResult.NONE, purchaseCount, 0, 0, 0);
+            throw StoreException.from(INVALID_ITEM);
         }
         Item findItem = itemOptional.get();
         return findItem.getPromotionResult(purchaseCount, orderDate);
