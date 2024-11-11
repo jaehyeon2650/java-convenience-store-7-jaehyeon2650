@@ -25,9 +25,8 @@ public class Items {
     public void purchaseItem(String itemName, int quantity) {
         validatePurchase(itemName, quantity);
         int totalCount = quantity;
-        List<Item> items = this.items.stream().filter(item -> item.getName().equals(itemName)).sorted()
-                .toList();
-        for (Item item : items) {
+        List<Item> list = items.stream().filter(item -> item.getName().equals(itemName)).sorted().toList();
+        for (Item item : list) {
             int purchaseCount = Math.min(totalCount, item.getQuantity());
             item.purchaseItem(purchaseCount);
             totalCount -= purchaseCount;
@@ -48,8 +47,7 @@ public class Items {
         if (itemOptional.isEmpty()) {
             throw StoreException.from(INVALID_ITEM);
         }
-        Item findItem = itemOptional.get();
-        return findItem.getPromotionResult(purchaseCount, orderDate);
+        return itemOptional.get().getPromotionResult(purchaseCount, orderDate);
     }
 
     public void validatePurchase(String itemName, int count) {
