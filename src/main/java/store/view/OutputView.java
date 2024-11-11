@@ -1,6 +1,5 @@
 package store.view;
 
-import java.util.List;
 import store.dto.response.ItemResponseDto;
 import store.dto.response.ItemsResponseDto;
 import store.dto.response.ReceiptResponseDto;
@@ -14,8 +13,7 @@ public class OutputView {
     public void printItemList(ItemsResponseDto itemList) {
         System.out.println("안녕하세요. W편의점입니다.");
         System.out.println("현재 보유하고 있는 상품입니다.\n");
-        List<ItemResponseDto> itemResponseDtos = itemList.itemResponses();
-        for (ItemResponseDto itemResponseDto : itemResponseDtos) {
+        for (ItemResponseDto itemResponseDto : itemList.itemResponses()) {
             System.out.printf("- " + itemResponseDto.name() + " %,d원 ", itemResponseDto.price());
             System.out.printf(getItemCount(itemResponseDto), itemResponseDto.quantity());
             printPromotion(itemResponseDto);
