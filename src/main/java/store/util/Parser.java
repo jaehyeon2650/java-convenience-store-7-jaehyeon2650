@@ -6,12 +6,20 @@ import static store.exception.ErrorMessage.INVALID_INPUT_FORMAT;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import store.dto.request.OrderRequestDto;
 import store.dto.request.OrdersRequestDto;
 import store.exception.StoreException;
 
 public class Parser {
-    public static OrdersRequestDto parseToOrders(String[] words) {
+    public static OrdersRequestDto makeOrdersRequest(String input) {
+        String[] words = input.split(",");
+        Validator.validateInputForm(words);
+        return parseToOrders(words);
+    }
+
+    private static OrdersRequestDto parseToOrders(String[] words) {
         List<OrderRequestDto> orderList = new ArrayList<>();
         Arrays.stream(words).forEach(
                 word -> {
@@ -24,14 +32,9 @@ public class Parser {
     }
 
     private static class Validator {
-        public static int validateNumber(String number) {
-            if (!number.matches("\\d+")) {
-                throw StoreException.from(INVALID_INPUT);
-            }
-            return changeTONumber(number);
-        }
+        private static final Pattern ITEM_PATTERN = Pattern.compile("^\\[\\s*[^\\[]+\\s*-\\s*\\d+\\s*\\]$");
 
-        private static int changeTONumber(String number) {
+        public static int validateNumber(String number) {
             int result = Integer.parseInt(number);
             if (result <= 0) {
                 throw StoreException.from(INVALID_INPUT);
@@ -42,6 +45,15 @@ public class Parser {
         public static void validateSplitResultSize(String[] order) {
             if (order.length != 2) {
                 throw StoreException.from(INVALID_INPUT_FORMAT);
+            }
+        }
+
+        public static void validateInputForm(String[] words) {
+            for (String word : words) {
+                Matcher matcher = ITEM_PATTERN.matcher(word.trim());
+                if (!matcher.matches()) {
+                    throw StoreException.from(INVALID_INPUT_FORMAT);
+                }
             }
         }
     }
