@@ -23,6 +23,7 @@ public class Items {
     }
 
     public void purchaseItem(String itemName, int quantity) {
+        validatePurchase(itemName, quantity);
         int totalCount = quantity;
         List<Item> items = this.items.stream().filter(item -> item.getName().equals(itemName)).sorted()
                 .toList();
@@ -34,6 +35,7 @@ public class Items {
     }
 
     public int calculateItemsPrice(String itemName, int quantity) {
+        Validator.validateItemName(items, itemName);
         Optional<Item> findItem = items.stream().filter(item -> item.getName().equals(itemName)).findAny();
         return findItem.map(item -> item.calculatePrice(quantity)).orElse(0);
     }
