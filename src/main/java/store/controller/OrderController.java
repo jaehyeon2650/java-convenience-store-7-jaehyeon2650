@@ -1,11 +1,13 @@
 package store.controller;
 
+import static store.domain.PromotionResult.APPLY_REGULAR_PRICE;
+import static store.domain.PromotionResult.REQUIRE_ADDITIONAL_ITEM;
+
 import camp.nextstep.edu.missionutils.DateTimes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
-import store.domain.PromotionResult;
 import store.dto.request.OrderRequestDto;
 import store.dto.request.OrdersRequestDto;
 import store.dto.request.PaymentRequestDto;
@@ -28,16 +30,13 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-
     public void run() {
         boolean rotate = true;
         while (rotate) {
-            outputView.printHelloMessage();
             outputView.printItemList(orderService.getItemList());
             List<PromotionInfoResponseDto> infoResponseDtos = retryAboutInvalidInput(this::makeOrderInfo);
             List<PaymentRequestDto> paymentRequestDtos = makePaymentsRequest(infoResponseDtos);
-            boolean memberShip = retryAboutInvalidInput(this::checkMemberShip);
-            createAndShowReceipt(paymentRequestDtos, memberShip);
+            createAndShowReceipt(paymentRequestDtos, retryAboutInvalidInput(this::checkMemberShip));
             rotate = retryAboutInvalidInput(this::checkRotate);
         }
     }
@@ -45,8 +44,7 @@ public class OrderController {
     private List<PromotionInfoResponseDto> makeOrderInfo() {
         List<PromotionInfoResponseDto> infoResponseDtos = new ArrayList<>();
         OrdersRequestDto orders = inputView.getOrders();
-        List<OrderRequestDto> orderRequestDtos = orders.orderList();
-        for (OrderRequestDto orderRequestDto : orderRequestDtos) {
+        for (OrderRequestDto orderRequestDto : orders.orderList()) {
             infoResponseDtos.add(orderService.getOrderInfo(orderRequestDto.name(),
                     orderRequestDto.quantity(),
                     DateTimes.now()));
@@ -64,14 +62,13 @@ public class OrderController {
 
     private PaymentRequestDto makePaymentRequest(PromotionInfoResponseDto promotionInfoResponseDto) {
         PromotionResponseDto promotion = promotionInfoResponseDto.promotionResponseDto();
-        String name = promotionInfoResponseDto.name();
-        if (promotionInfoResponseDto.getPromotionResult() == PromotionResult.APPLY_REGULAR_PRICE) {
-            return createRequestWhenApplyRegualrPrice(name, promotion);
+        if (promotionInfoResponseDto.getPromotionResult() == APPLY_REGULAR_PRICE) {
+            return createRequestWhenApplyRegualrPrice(promotionInfoResponseDto.name(), promotion);
         }
-        if (promotionInfoResponseDto.getPromotionResult() == PromotionResult.REQUIRE_ADDITIONAL_ITEM) {
-            return createRequestWhenRequireAdditionalItem(name, promotion);
+        if (promotionInfoResponseDto.getPromotionResult() == REQUIRE_ADDITIONAL_ITEM) {
+            return createRequestWhenRequireAdditionalItem(promotionInfoResponseDto.name(), promotion);
         }
-        return new PaymentRequestDto(name, promotion.buyCount(), promotion.getCount());
+        return new PaymentRequestDto(promotionInfoResponseDto.name(), promotion.buyCount(), promotion.getCount());
     }
 
     private PaymentRequestDto createRequestWhenRequireAdditionalItem(String name, PromotionResponseDto promotion) {
