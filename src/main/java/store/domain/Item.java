@@ -7,10 +7,10 @@ import store.exception.ErrorMessage;
 import store.exception.StoreException;
 
 public class Item implements Comparable<Item> {
-    private String name;
-    private int price;
+    private final String name;
+    private final int price;
     private int quantity;
-    private Promotion promotion;
+    private final Promotion promotion;
 
     public Item(String name, int price, int quantity, Promotion promotion) {
         this.name = name;
