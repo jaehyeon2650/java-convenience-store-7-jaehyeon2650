@@ -11,29 +11,12 @@ import store.dto.response.PromotionResponseDto;
 
 class PromotionTest {
     @Test
-    @DisplayName("getPromotionResult(2+1) - 프로모션 기간이 아닐때 주문한 경우 결과는 일반 구매와 같다")
-    void notPromotionDate() {
-        // given
-        Promotion promotion = make2Plus1Promotion();
-        // when
-        PromotionResponseDto promotionResult = promotion.getPromotionResult(10, 7,
-                LocalDateTime.of(2024, 12, 10, 0, 0, 0));
-        // then
-        assertThat(promotionResult.result()).isEqualTo(PromotionResult.NONE);
-        assertThat(promotionResult.buyCount()).isEqualTo(7);
-        assertThat(promotionResult.getCount()).isEqualTo(0);
-        assertThat(promotionResult.extraGet()).isEqualTo(0);
-        assertThat(promotionResult.extraBuy()).isEqualTo(0);
-    }
-
-    @Test
     @DisplayName("getPromotionResult(2+1) - 프로모션 아이템 재고보다 많이 구매하려는 경우 일반 결제할 상품이 생긴다.")
     void moreThanStockQuantityWhen2plus1() {
         // given
         Promotion promotion = make2Plus1Promotion();
         // when
-        PromotionResponseDto promotionResult = promotion.getPromotionResult(10, 11,
-                LocalDateTime.of(2024, 10, 10, 0, 0, 0));
+        PromotionResponseDto promotionResult = promotion.getPromotionResult(10, 11);
         // then
         assertThat(promotionResult.result()).isEqualTo(PromotionResult.APPLY_REGULAR_PRICE);
         assertThat(promotionResult.buyCount()).isEqualTo(6);
@@ -51,8 +34,7 @@ class PromotionTest {
         // given
         Promotion promotion = make2Plus1Promotion();
         // when
-        PromotionResponseDto promotionResult = promotion.getPromotionResult(stockQuantity, purchase,
-                LocalDateTime.of(2024, 10, 10, 0, 0, 0));
+        PromotionResponseDto promotionResult = promotion.getPromotionResult(stockQuantity, purchase);
         // then
         assertThat(promotionResult.result()).isEqualTo(PromotionResult.APPLY_REGULAR_PRICE);
         assertThat(promotionResult.buyCount()).isEqualTo(expectedBuyCount);
@@ -69,8 +51,7 @@ class PromotionTest {
         // given
         Promotion promotion = make2Plus1Promotion();
         // when
-        PromotionResponseDto promotionResult = promotion.getPromotionResult(10, purchase,
-                LocalDateTime.of(2024, 10, 10, 0, 0, 0));
+        PromotionResponseDto promotionResult = promotion.getPromotionResult(10, purchase);
         // then
         assertThat(promotionResult.result()).isEqualTo(PromotionResult.REQUIRE_ADDITIONAL_ITEM);
         assertThat(promotionResult.buyCount()).isEqualTo(expectedBuyCount);
@@ -86,8 +67,7 @@ class PromotionTest {
         // given
         Promotion promotion = make2Plus1Promotion();
         // when
-        PromotionResponseDto promotionResult = promotion.getPromotionResult(10, purchase,
-                LocalDateTime.of(2024, 10, 10, 0, 0, 0));
+        PromotionResponseDto promotionResult = promotion.getPromotionResult(10, purchase);
         // then
         assertThat(promotionResult.result()).isEqualTo(PromotionResult.SUCCESS);
         assertThat(promotionResult.buyCount()).isEqualTo(expectedBuyCount);
@@ -108,8 +88,7 @@ class PromotionTest {
         // given
         Promotion promotion = make1Plus1Promotion();
         // when
-        PromotionResponseDto promotionResult = promotion.getPromotionResult(10, 11,
-                LocalDateTime.of(2024, 10, 10, 0, 0, 0));
+        PromotionResponseDto promotionResult = promotion.getPromotionResult(10, 11);
         // then
         assertThat(promotionResult.result()).isEqualTo(PromotionResult.APPLY_REGULAR_PRICE);
         assertThat(promotionResult.buyCount()).isEqualTo(5);
@@ -127,8 +106,7 @@ class PromotionTest {
         // given
         Promotion promotion = make1Plus1Promotion();
         // when
-        PromotionResponseDto promotionResult = promotion.getPromotionResult(stockQuantity, purchase,
-                LocalDateTime.of(2024, 10, 10, 0, 0, 0));
+        PromotionResponseDto promotionResult = promotion.getPromotionResult(stockQuantity, purchase);
         // then
         assertThat(promotionResult.result()).isEqualTo(PromotionResult.APPLY_REGULAR_PRICE);
         assertThat(promotionResult.buyCount()).isEqualTo(expectedBuyCount);
@@ -145,8 +123,7 @@ class PromotionTest {
         // given
         Promotion promotion = make1Plus1Promotion();
         // when
-        PromotionResponseDto promotionResult = promotion.getPromotionResult(10, purchase,
-                LocalDateTime.of(2024, 10, 10, 0, 0, 0));
+        PromotionResponseDto promotionResult = promotion.getPromotionResult(10, purchase);
         // then
         assertThat(promotionResult.result()).isEqualTo(PromotionResult.REQUIRE_ADDITIONAL_ITEM);
         assertThat(promotionResult.buyCount()).isEqualTo(expectedBuyCount);
@@ -162,8 +139,7 @@ class PromotionTest {
         // given
         Promotion promotion = make1Plus1Promotion();
         // when
-        PromotionResponseDto promotionResult = promotion.getPromotionResult(10, purchase,
-                LocalDateTime.of(2024, 10, 10, 0, 0, 0));
+        PromotionResponseDto promotionResult = promotion.getPromotionResult(10, purchase);
         // then
         assertThat(promotionResult.result()).isEqualTo(PromotionResult.SUCCESS);
         assertThat(promotionResult.buyCount()).isEqualTo(expectedBuyCount);
