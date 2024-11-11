@@ -30,13 +30,21 @@ public class Promotion {
         if (!canApplyPromotion(orderDate)) {
             return createFailResponse(purchase);
         }
-        if (stockQuantity > purchase && purchase % (buy + get) == buy) {
+        if (isAdditionalPurchaseRequired(stockQuantity, purchase)) {
             return createAdditionalPurchaseRequirementResponse(purchase);
         }
-        if (stockQuantity < purchase || (stockQuantity == purchase && purchase % (get + buy) == buy)) {
+        if (isRegularPriceRequired(stockQuantity, purchase)) {
             return createRegularPriceRequirementResponse(stockQuantity, purchase);
         }
         return createSuccessResponse(purchase);
+    }
+
+    private boolean isAdditionalPurchaseRequired(int stockQuantity, int purchase) {
+        return stockQuantity > purchase && purchase % (buy + get) == buy;
+    }
+
+    private boolean isRegularPriceRequired(int stockQuantity, int purchase) {
+        return stockQuantity < purchase || (stockQuantity == purchase && purchase % (get + buy) == buy);
     }
 
     private boolean canApplyPromotion(LocalDateTime time) {
