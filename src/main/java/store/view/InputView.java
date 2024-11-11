@@ -1,13 +1,8 @@
 package store.view;
 
-import static store.exception.ErrorMessage.INVALID_INPUT_FORMAT;
-
 import camp.nextstep.edu.missionutils.Console;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import store.constants.Answer;
 import store.dto.request.OrdersRequestDto;
-import store.exception.StoreException;
 import store.util.Parser;
 
 public class InputView {
@@ -15,9 +10,7 @@ public class InputView {
         System.out.println("구매하실 상품명과 수량을 입력해 주세요. (예: [사이다-2],[감자칩-1])");
         String orderList = Console.readLine().trim();
         System.out.println();
-        String[] words = orderList.split(",");
-        Validator.validateInputForm(words);
-        return Parser.parseToOrders(words);
+        return Parser.makeOrdersRequest(orderList);
     }
 
     public boolean chooseAddFreeItem(String name, int count) {
@@ -44,18 +37,5 @@ public class InputView {
         String answer = Console.readLine().trim();
         System.out.println();
         return Answer.findAnswer(answer).isAnswer();
-    }
-
-    private static class Validator {
-        private static final Pattern ITEM_PATTERN = Pattern.compile("^\\[\\s*[^\\[]+\\s*-\\s*\\d+\\s*\\]$");
-
-        public static void validateInputForm(String[] words) {
-            for (String word : words) {
-                Matcher matcher = ITEM_PATTERN.matcher(word.trim());
-                if (!matcher.matches()) {
-                    throw StoreException.from(INVALID_INPUT_FORMAT);
-                }
-            }
-        }
     }
 }
