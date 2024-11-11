@@ -47,6 +47,9 @@ public class Item implements Comparable<Item> {
     }
 
     public PromotionResponseDto getPromotionResult(int purchaseCount, LocalDateTime orderDate) {
+        if (promotion == null) {
+            return new PromotionResponseDto(PromotionResult.NONE, purchaseCount, 0, 0, 0);
+        }
         return promotion.getPromotionResult(quantity, purchaseCount, orderDate);
     }
 
@@ -56,7 +59,6 @@ public class Item implements Comparable<Item> {
             throw StoreException.from(ErrorMessage.INVALID_QUANTITY);
         }
     }
-
 
     @Override
     public int compareTo(Item other) {
