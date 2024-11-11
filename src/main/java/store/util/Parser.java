@@ -3,7 +3,6 @@ package store.util;
 import static store.exception.ErrorMessage.INVALID_INPUT;
 import static store.exception.ErrorMessage.INVALID_INPUT_FORMAT;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -20,14 +19,13 @@ public class Parser {
     }
 
     private static OrdersRequestDto parseToOrders(String[] words) {
-        List<OrderRequestDto> orderList = new ArrayList<>();
-        Arrays.stream(words).forEach(
-                word -> {
+        List<OrderRequestDto> orderList = Arrays.stream(words)
+                .map(word -> {
                     String[] order = word.substring(1, word.length() - 1).trim().split("-");
                     Validator.validateSplitResultSize(order);
-                    orderList.add(new OrderRequestDto(order[0].trim(), Validator.validateNumber(order[1].trim())));
-                }
-        );
+                    return new OrderRequestDto(order[0].trim(), Validator.validateNumber(order[1].trim()));
+                })
+                .toList();
         return new OrdersRequestDto(orderList);
     }
 
