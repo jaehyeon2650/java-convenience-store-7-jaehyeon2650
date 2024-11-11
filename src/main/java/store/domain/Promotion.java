@@ -26,10 +26,11 @@ public class Promotion {
         return name;
     }
 
-    public PromotionResponseDto getPromotionResult(int stockQuantity, int purchase, LocalDateTime orderDate) {
-        if (!canApplyPromotion(orderDate)) {
-            return createFailResponse(purchase);
-        }
+    public boolean canApplyPromotion(LocalDateTime time) {
+        return startDate.isBefore(time) && endDate.isAfter(time);
+    }
+
+    public PromotionResponseDto getPromotionResult(int stockQuantity, int purchase) {
         if (isAdditionalPurchaseRequired(stockQuantity, purchase)) {
             return createAdditionalPurchaseRequirementResponse(purchase);
         }
@@ -45,10 +46,6 @@ public class Promotion {
 
     private boolean isRegularPriceRequired(int stockQuantity, int purchase) {
         return stockQuantity < purchase || (stockQuantity == purchase && purchase % (get + buy) == buy);
-    }
-
-    private boolean canApplyPromotion(LocalDateTime time) {
-        return startDate.isBefore(time) && endDate.isAfter(time);
     }
 
     private PromotionResponseDto createFailResponse(int purchase) {
