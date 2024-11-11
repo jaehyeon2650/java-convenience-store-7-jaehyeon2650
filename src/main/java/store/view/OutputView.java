@@ -6,6 +6,12 @@ import store.dto.response.ReceiptResponseDto;
 import store.dto.response.ReceiptsResponseDto;
 
 public class OutputView {
+    private static final String MINUS = "-";
+    private static final String MONEY_UNIT = " %,d원 ";
+    private static final String COUNT_UNIT = "%,d개";
+    private static final String DASH = "- ";
+    private static final String BLANK = "";
+
     public void printErrorMessage(String errorMessage) {
         System.out.println(errorMessage);
     }
@@ -14,7 +20,7 @@ public class OutputView {
         System.out.println("안녕하세요. W편의점입니다.");
         System.out.println("현재 보유하고 있는 상품입니다.\n");
         for (ItemResponseDto itemResponseDto : itemList.itemResponses()) {
-            System.out.printf("- " + itemResponseDto.name() + " %,d원 ", itemResponseDto.price());
+            System.out.printf(DASH + itemResponseDto.name() + MONEY_UNIT, itemResponseDto.price());
             System.out.printf(getItemCount(itemResponseDto), itemResponseDto.quantity());
             printPromotion(itemResponseDto);
         }
@@ -32,7 +38,7 @@ public class OutputView {
         if (itemResponseDto.quantity() == 0) {
             return "재고 없음";
         }
-        return "%,d개";
+        return COUNT_UNIT;
     }
 
     private void printPromotion(ItemResponseDto itemResponseDto) {
@@ -65,8 +71,8 @@ public class OutputView {
     private static void printReceiptsSummary(ReceiptsResponseDto response) {
         System.out.println("=====================================");
         System.out.printf("%-17s%-8d%,-10d%n", "총구매액", response.totalCount(), response.totalPrice());
-        System.out.printf("%-17s%8s%s%,-11d%n", "행사할인", "", "-", response.promotionDiscount());
-        System.out.printf("%-17s%8s%s%,-11d%n", "멤버십할인", "", "-", response.membershipDiscount());
-        System.out.printf("%-17s%10s%,-10d%n" + System.lineSeparator(), "내실돈", "", response.payment());
+        System.out.printf("%-17s%8s%s%,-11d%n", "행사할인", BLANK, MINUS, response.promotionDiscount());
+        System.out.printf("%-17s%8s%s%,-11d%n", "멤버십할인", BLANK, MINUS, response.membershipDiscount());
+        System.out.printf("%-17s%10s%,-10d%n" + System.lineSeparator(), "내실돈", BLANK, response.payment());
     }
 }
