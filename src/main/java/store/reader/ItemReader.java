@@ -9,6 +9,12 @@ import store.domain.Promotion;
 import store.util.Reader;
 
 public class ItemReader {
+    private static final String DELIMITER = ",";
+    private static final int NAME_INDEX = 0;
+    private static final int PRICE_INDEX = 1;
+    private static final int QUANTITY_INDEX = 2;
+    private static final int PROMOTION_NAME_INDEX = 3;
+
     public List<Item> readItems(String file, List<Promotion> promotions) throws IOException {
         List<String> lines = Reader.readFile(file);
         List<Item> items = new ArrayList<>();
@@ -19,11 +25,11 @@ public class ItemReader {
     }
 
     private Item parseItem(String line, List<Promotion> promotions) {
-        String[] parts = line.split(",");
-        String name = parts[0];
-        int price = Integer.parseInt(parts[1]);
-        int quantity = Integer.parseInt(parts[2]);
-        String promotionsName = parts[3];
+        String[] parts = line.split(DELIMITER);
+        String name = parts[NAME_INDEX];
+        int price = Integer.parseInt(parts[PRICE_INDEX]);
+        int quantity = Integer.parseInt(parts[QUANTITY_INDEX]);
+        String promotionsName = parts[PROMOTION_NAME_INDEX];
         Optional<Promotion> promotionOptional = promotions.stream()
                 .filter(promotion -> promotion.getPromotionName().equals(promotionsName)).findAny();
         return new Item(name, price, quantity, promotionOptional.orElse(null));
