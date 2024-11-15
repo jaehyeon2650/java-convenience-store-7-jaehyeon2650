@@ -4,7 +4,6 @@ import static store.exception.ErrorMessage.INVALID_ITEM;
 import static store.exception.ErrorMessage.INVALID_QUANTITY;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +18,9 @@ public class Items {
     }
 
     public List<Item> getItems() {
-        return Collections.unmodifiableList(items);
+        return items.stream()
+                .map(item -> new Item(item.getName(), item.getPrice(), item.getQuantity(), item.getPromotion()))
+                .toList();
     }
 
     public void purchaseItem(String itemName, int quantity) {

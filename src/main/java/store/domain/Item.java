@@ -35,6 +35,10 @@ public class Item implements Comparable<Item> {
         return quantity;
     }
 
+    public Promotion getPromotion() {
+        return promotion;
+    }
+
     public int calculatePrice(int quantity) {
         return price * quantity;
     }
