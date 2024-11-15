@@ -12,8 +12,12 @@ import store.dto.request.OrdersRequestDto;
 import store.exception.StoreException;
 
 public class Parser {
+    private static final String DELIMITER = ",";
+    private static final int ITEM_NAME_INDEX = 0;
+    private static final int ITEM_COUNT_INDEX = 1;
+
     public static OrdersRequestDto makeOrdersRequest(String input) {
-        String[] words = input.split(",");
+        String[] words = input.split(DELIMITER);
         Validator.validateInputForm(words);
         return parseToOrders(words);
     }
@@ -23,7 +27,8 @@ public class Parser {
                 .map(word -> {
                     String[] order = word.substring(1, word.length() - 1).trim().split("-");
                     Validator.validateSplitResultSize(order);
-                    return new OrderRequestDto(order[0].trim(), Validator.validateNumber(order[1].trim()));
+                    return new OrderRequestDto(order[ITEM_NAME_INDEX].trim(),
+                            Validator.validateNumber(order[ITEM_COUNT_INDEX].trim()));
                 })
                 .toList();
         return new OrdersRequestDto(orderList);
@@ -31,17 +36,19 @@ public class Parser {
 
     private static class Validator {
         private static final Pattern ITEM_PATTERN = Pattern.compile("^\\[\\s*[^\\[]+\\s*-\\s*\\d+\\s*\\]$");
+        private static final int NUMBER_MIN = 0;
+        private static final int RESULT_SIZE = 2;
 
         public static int validateNumber(String number) {
             int result = Integer.parseInt(number);
-            if (result <= 0) {
+            if (result <= NUMBER_MIN) {
                 throw StoreException.from(INVALID_INPUT);
             }
             return result;
         }
 
         public static void validateSplitResultSize(String[] order) {
-            if (order.length != 2) {
+            if (order.length != RESULT_SIZE) {
                 throw StoreException.from(INVALID_INPUT_FORMAT);
             }
         }
