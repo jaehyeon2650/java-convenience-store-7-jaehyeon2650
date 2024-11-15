@@ -13,6 +13,9 @@ import store.dto.response.ReceiptResponseDto;
 import store.dto.response.ReceiptsResponseDto;
 
 public class OrderService {
+    private static final int MAX_MEMBERSHIP_BENEFIT = 8000;
+    private static final double MEMBERSHIP_DISCOUNT_PERCENTAGE = 0.3;
+    private static final int NONE_BENEFIT = 0;
 
     private final Items items;
 
@@ -63,7 +66,7 @@ public class OrderService {
         if (memberShip) {
             return createResponseDto(totalPrice, totalCount, promotionDiscount, membershipBenefit, receipts);
         }
-        return createResponseDto(totalPrice, totalCount, promotionDiscount, 0, receipts);
+        return createResponseDto(totalPrice, totalCount, promotionDiscount, NONE_BENEFIT, receipts);
     }
 
     private int calculateTotalPrice(List<ReceiptResponseDto> receipts) {
@@ -80,14 +83,14 @@ public class OrderService {
 
     private int calculateNotBenefitPrice(List<ReceiptResponseDto> receipts) {
         return receipts.stream()
-                .filter(receipt -> receipt.benefit() == 0)
+                .filter(receipt -> receipt.benefit() == NONE_BENEFIT)
                 .mapToInt(ReceiptResponseDto::itemsPrice)
                 .sum();
     }
 
     private int calculateMembershipBenefit(int notBenefitPrice) {
-        int membershipBenefit = (int) (notBenefitPrice * 0.3);
-        return Math.min(membershipBenefit, 8000);
+        int membershipBenefit = (int) (notBenefitPrice * MEMBERSHIP_DISCOUNT_PERCENTAGE);
+        return Math.min(membershipBenefit, MAX_MEMBERSHIP_BENEFIT);
     }
 
     private ReceiptsResponseDto createResponseDto(int totalPrice, int totalCount, int promotionDiscount,
