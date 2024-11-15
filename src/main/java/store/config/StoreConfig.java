@@ -14,21 +14,38 @@ import store.view.InputView;
 import store.view.OutputView;
 
 public class StoreConfig {
+    private static OrderService orderService;
+    private static OutputView outputView;
+    private static InputView inputView;
+    private static OrderController orderController;
+
     public OrderService orderService() {
-        Items items = Initialize.initializeItems();
-        return new OrderService(items);
+        if (orderService == null) {
+            Items items = Initialize.initializeItems();
+            orderService = new OrderService(items);
+        }
+        return orderService;
     }
 
     public OutputView outputView() {
-        return new OutputView();
+        if (outputView == null) {
+            outputView = new OutputView();
+        }
+        return outputView;
     }
 
     public InputView inputView() {
-        return new InputView();
+        if (inputView == null) {
+            inputView = new InputView();
+        }
+        return inputView;
     }
 
     public OrderController orderController() {
-        return new OrderController(outputView(), inputView(), orderService());
+        if (orderController == null) {
+            orderController = new OrderController(outputView(), inputView(), orderService());
+        }
+        return orderController;
     }
 
     private static class Initialize {
